@@ -1,5 +1,5 @@
 function [r] = rPR(z1, z2, params)
-%RPR returns the stability function for parareal run using a course and fine RK method
+%RPR returns the stability function for parareal run using a coarse and fine RK method
 % PARAMETERS
 %   z1     (scalar) - exponential term: z_1 = h * \lambda_1
 %   z2     (vector) - exponential term: z_2 = h * \lambda_2. Multiple z_2 can be passed in as a vector
@@ -15,7 +15,7 @@ np = params.np; % number of processors or blocks
 nf = params.nf; % number of fine steps per coarse step
 it = params.iterations;
 
-C = params.course(z1 / (nc * np), z2 / (np * nc)) .^ (nc);
+C = params.coarse(z1 / (nc * np), z2 / (np * nc)) .^ (nc);
 F = params.fine(z1 / (np * nf), z2 / (np * nf)) .^ (nf);
 
 c1 = [1; zeros(np, 1)];

@@ -18,10 +18,10 @@ if(nargin < 4)
 end
 
 nc = params.nc; % number of total steps
-np = params.np; % number of course steps per processor
+np = params.np; % number of coarse steps per processor
 nf = params.nf; % number of fine steps per processor
 
-C = params.course(z1 / (nc * np), z2 / (np * nc)) .^ (nc);
+C = params.coarse(z1 / (nc * np), z2 / (np * nc)) .^ (nc);
 F = params.fine(z1 / (np * nf), z2 / (np * nf)).^(nf);
 I = eye(np+1);
     

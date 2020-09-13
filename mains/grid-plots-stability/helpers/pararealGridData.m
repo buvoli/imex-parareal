@@ -7,7 +7,7 @@ function [data_raw_stab, data_raw_svd, data_raw_se] = pararealGridData(options)
 %       z2_im: vector   - imaginary z2 points
 %       nc: number      - number of coarse integrator steps
 %       nf: number      - number of fine integrator steps
-%       ci: @(z1,z2)    - stability function for course integrator
+%       ci: @(z1,z2)    - stability function for coarse integrator
 %       fi: @(z1,z2)    - stability function for fine integrator
 %       nps: vector     - different values of processors that should be considered.
 %       iters: vector   - different values of iterations that should be considered.
@@ -18,7 +18,7 @@ z1_angle = options.z1_angle;
 z2_r = options.z2_r;
 z2_angle = options.z2_angle;
 
-nc    = options.nc;         % num course steps
+nc    = options.nc;         % num coarse steps
 nt    = options.nt;         % num time steps
 nfs   = options.nfs;        % num fine steps
 iters = options.iters;      % num iters
@@ -38,7 +38,7 @@ for i = 1 : num_nf
         error('nf must divide nt')
     end
     np = nt / nfs(i);
-    pr_params = struct('course', ci, 'fine', fi, 'np', np, 'nc', nc, 'nf', nfs(i));
+    pr_params = struct('coarse', ci, 'fine', fi, 'np', np, 'nc', nc, 'nf', nfs(i));
     switch(options.scaling_factor)
         case 'total-fine-steps'
             sf = nt; % set scaling factor based on computational work of fine integrator

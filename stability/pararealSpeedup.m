@@ -2,7 +2,7 @@ function [ S, E ] = pararealSpeedup(options)
 %SPEEDUP Returns speedup and efficiencry for parareal method
 %   Detailed explanation goes here
 
-cost_coarse = cost(options.course);
+cost_coarse = cost(options.coarse);
 cost_fine   = cost(options.fine);
     
 alpha = (cost_coarse * options.nc) / (cost_fine * options.nf);

@@ -7,7 +7,7 @@ function [fh] = pararealGridPlotter(data_raw_stab, data_raw_svd, data_raw_se, op
 %       z2_im: vector   - imaginary z2 points
 %       nc: number      - number of coarse integrator steps
 %       nf: number      - number of fine integrator steps
-%       ci: @(z1,z2)    - stability function for course integrator
+%       ci: @(z1,z2)    - stability function for coarse integrator
 %       fi: @(z1,z2)    - stability function for fine integrator
 %       nps: vector     - different values of processors that should be considered.
 %       iters: vector   - different values of iterations that should be considered.

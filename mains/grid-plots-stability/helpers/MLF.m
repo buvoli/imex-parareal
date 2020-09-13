@@ -7,7 +7,7 @@ ci_name = foo.function;
 foo = functions(parameters.fi);
 fi_name = foo.function;
 
-% exit if course integrator has higher order then fine 
+% exit if coarse integrator has higher order then fine 
 if(ci_name(end) > fi_name(end))
     return
 end
@@ -33,7 +33,7 @@ parameters.z2_angle = z2_angle;
 % -- load data if existant ---------------------------------------------------------------------------------------------
 parent_dir = fullfile('figures', ['nt-', num2str(parameters.nt)]); % organize by num fine
 ckmkdir(parent_dir);
-filename = fullfile(parent_dir, join({parameters.angles, parameters.zoom, num2str(num_grid_points),  i_class, 'course', ci_name, 'nc', num2str(parameters.nc), 'fine', fi_name, 'nt', num2str(parameters.nt)}, '_'));
+filename = fullfile(parent_dir, join({parameters.angles, parameters.zoom, num2str(num_grid_points),  i_class, 'coarse', ci_name, 'nc', num2str(parameters.nc), 'fine', fi_name, 'nt', num2str(parameters.nt)}, '_'));
 data_file = [filename{:}, '.mat'];
 
 if(isfile(data_file))
