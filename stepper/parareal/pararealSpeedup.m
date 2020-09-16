@@ -24,8 +24,10 @@ function c = cost(rk_worker)
             c = 2;
         case {"ERK3", "IMRK3"}
             c = 3;
-        case {"ERK4", "IMRK4"}
+        case {"ERK4"}
             c = 4;
+        case {"IMRK4"}
+            c = 5;
         otherwise
             warning('Unknown integator; Cannot determine cost.')
             c = NaN;

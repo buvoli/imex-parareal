@@ -24,8 +24,10 @@ function c = cost(handle)
             c = 2;
         case {"rERK3", "rIMRK3"}
             c = 3;
-        case {"rERK4", "rIMRK4"}
+        case {"rERK4"}
             c = 4;
+        case {"rIMRK4"}
+            c = 5;
         otherwise
             warning('Unknown integator; Cannot determine cost.')
             c = NaN;
