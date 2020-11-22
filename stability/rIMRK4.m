@@ -1,5 +1,6 @@
 function [R] = rIMRK4(z1, z2_vec)
-%rERK4 stability function for Eqn (51) from S. Krogstad. "Generalized integrating factor methods for stiff PDEs", 2005
+%rERK4 stability function for IMEX ARK4(3)6L[2]SA from "C. A. Kennedy and M. H. Carpenter, "Additive Runge-Kutta 
+% schemes for convection-diffusion-reaction equations", (2003).
 % PARAMETERS
 %   z1     (scalar) - exponential term: z_1 = h * \lambda_1
 %   z2     (vector) - exponential term: z_2 = h * \lambda_2. Multiple z_2 can be passed in as a vector

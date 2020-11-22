@@ -1,5 +1,6 @@
 function [R] = rIMRK3(z1, z2_vec)
-%rIMRK1 stability function for IMEX forward/backward euler pair
+%rIMRK1 stability function for IMEX ARK3(2)4L[2]SA from "C. A. Kennedy and M. H. Carpenter, "Additive Runge-Kutta 
+% schemes for convection-diffusion-reaction equations", (2003). 
 % PARAMETERS
 %   z1     (scalar) - exponential term: z_1 = h * \lambda_1
 %   z2     (vector) - exponential term: z_2 = h * \lambda_2. Multiple z_2 can be passed in as a vector

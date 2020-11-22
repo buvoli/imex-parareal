@@ -1,5 +1,6 @@
 function [R] = rIMRK2(z1, z2_vec)
-%rIMRK1 stability function for IMEX forward/backward euler pair
+%rIMRK2 stability function for IMEX (2,3,2) methods from U. M. Ascher, S. J. Ruuth, R. J. Spiteri, "Implicit-Explicit
+% Runge-Kutta methods for time-dependent partial differential equations" 
 % PARAMETERS
 %   z1     (scalar) - exponential term: z_1 = h * \lambda_1
 %   z2     (vector) - exponential term: z_2 = h * \lambda_2. Multiple z_2 can be passed in as a vector
