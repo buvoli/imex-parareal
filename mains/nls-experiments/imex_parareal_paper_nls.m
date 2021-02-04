@@ -80,6 +80,14 @@ end
 basename = ['imex-nls-paper-experiment-A-', num2str(floor(posixtime(datetime('now'))))];
 save(fullfile('data', [basename, '.mat']))
 
+%% -- plot settings -------------------------------------------------------
+marker_styles = {'o', '+', '*', 'x', 's', 'd', '^'};
+markerStyle   = @(j) marker_styles{mod(j-1, length(marker_styles)) + 1};
+marker_size   = 10;
+
+line_styles   = {'-',':','-.','--','--*','--+', '--d'};
+lineStyle   = @(j) line_styles{mod(j-1, length(line_styles)) + 1};
+
 %% -- generate plots ---------------------------------------------------------------------------------------------------
 hs = diff(tspan) ./ steps;
 scale_times = true;
@@ -105,7 +113,11 @@ for i = 1 : length(Nts)
     % -- accuracy plots ------------------------------------------------------------------------------------------------
     basename = ['imex-nls-accuracy-NT', num2str(Nts(i))];
     loglog(hs, rk_errors, '.-k', 'linewidth', 3, 'MarkerSize', 30); hold on;
-    loglog(hs, p_error_matrix, '.-', 'linewidth', 3, 'MarkerSize', 30); hold off;
+    for j = 1 : size(p_error_matrix,2)
+        p1 = loglog(hs, p_error_matrix(:,j), ['-', markerStyle(j)],  'linewidth', 3, 'MarkerSize', marker_size);
+        set(p1, 'MarkerFaceColor', get(p1, 'color'));
+    end
+    hold off;
     if(i == 1)
         legend(legend_cell, 'Location', 'southeast'); legend box off;
     end
@@ -118,7 +130,10 @@ for i = 1 : length(Nts)
     % -- efficiency plots ----------------------------------------------------------------------------------------------
     basename = ['imex-nls-efficiency-NT', num2str(Nts(i))];
     loglog(rk_times / tsf, rk_errors, '.-k', 'linewidth', 3, 'MarkerSize', 30); hold on;
-    loglog(p_times_matrix / tsf, p_error_matrix, '--', 'linewidth', 3, 'MarkerSize', 30); hold off;
+    for j = 1 : size(p_error_matrix,2)
+        loglog(p_times_matrix(:,j) / tsf, p_error_matrix(:,j), lineStyle(j), 'linewidth', 3);
+    end
+    hold off;
     legend(legend_cell, 'Location', 'northeast'); %legend box off;
     if(scale_times)
         xlabel('relative time');
@@ -221,7 +236,10 @@ p_times_matrix   = reshape([resultsB_parareal.optimal_time], [length(steps), len
 % -- accuracy plots ----------------------------------------------------------------------------------------------------
 basename = ['imex-nls-NFS-accuracy-NT', num2str(Nt_fixed)];
 loglog(hs, rk_errors, '.-k', 'linewidth', 3, 'MarkerSize', 30); hold on;
-loglog(hs, p_error_matrix, '.-', 'linewidth', 3, 'MarkerSize', 30); hold off;
+for i = 1 : size(p_error_matrix, 2)
+    loglog(hs, p_error_matrix(:,i), [markerStyle(i), '-'], 'linewidth', 3, 'MarkerSize', marker_size);
+end
+hold off;
 legend(legend_cell, 'Location', 'southeast'); legend box off;
 axis([min(hs) max(hs) 1e-9 1e1]);
 xlabel('stepsize $\Delta t$', 'interpreter', 'latex'); ylabel('relative error', 'interpreter', 'latex');
@@ -230,9 +248,13 @@ set(gca, 'FontSize', 15, 'FontName', 'Minion Pro');
 exportFigure(fh, struct('SavePath', fullfile('figures', basename), 'Format', 'jpg', 'PaperPosition', [0 0 12, 14]))
 
 % -- efficiency plots --------------------------------------------------------------------------------------------------
+clf;
 basename = ['imex-nls-NFS-efficiency-NT', num2str(Nt_fixed)];
 loglog(rk_times, rk_errors, '.-k', 'linewidth', 3, 'MarkerSize', 30); hold on;
-loglog(p_times_matrix, p_error_matrix, '.--', 'linewidth', 3, 'MarkerSize', 30); hold off;
+for i = 1 : size(p_error_matrix, 2)
+    p1 = loglog(p_times_matrix(:,i), p_error_matrix(:,i), [markerStyle(i), '--'], 'linewidth', 3, 'MarkerSize', marker_size);
+end
+hold off;
 legend(legend_cell, 'Location', 'southwest'); legend box off;
 axis([min(rk_times) max(rk_times) 1e-9 1e1]);
 title(title_str, 'interpreter', 'Latex');
