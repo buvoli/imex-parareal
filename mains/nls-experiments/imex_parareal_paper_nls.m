@@ -144,37 +144,45 @@ for i = 1 : length(Nts)
     end
     ylabel('relative error');    
     title(title_str, 'interpreter', 'Latex');
-    set(gca, 'FontSize', 15, 'FontName', 'Minion Pro');
-    exportFigure(fh, struct('SavePath', fullfile('figures', basename), 'Format', 'jpg', 'PaperPosition', [0 0 14, 14]))
+    set(gca, 'FontSize', 17, 'FontName', 'Minion Pro');
+    exportFigure(fh, struct('SavePath', fullfile('figures', basename), 'Format', 'jpg', 'PaperPosition', [0 0 16, 14]))
 
 end   
 
 %% -- generate adaptive efficiency diagrams ----------------------------------------------------------------------------
+libpfasst_data = csvread('libpfasst-data-no-headers.csv');
+normalization  = libpfasst_data(2,2); % normalize all times relative to first convergent timestep of fine integrator
+
 rk_errors = [results_rk.error];
-rk_times  = [results_rk.time] / results_rk(2).time;
+rk_times  = libpfasst_data(:,2) / normalization;
 
 % -- Nt = 2048, k=3 ----------------------------------------------------------------------------------------------------
 p_k3_error = [results_parareal(3, :, 4).error];
-p_k3_times = rk_times / 16.176935229067933;
+p_k3_times = libpfasst_data(:,3) / normalization;
+p_k3_times_theoretical = rk_times / 16.176935229067933;
 
 % -- Nt = 2048, adaptive k<=3 ------------------------------------------------------------------------------------------
-pfasst_data = csvread('pfasst-ka-data.csv'); % column1: steps, column2: error, column3: speedup
-p_ka_error = pfasst_data(:, 2);
-p_ka_times = rk_times(:) ./ pfasst_data(:, 3);
+p_ka_error = libpfasst_data(:, 5);
+p_ka_times = libpfasst_data(:, 4) / normalization;
+p_ka_times_theoretical = rk_times(:) ./ libpfasst_data(:,6);
 
 fh = figure(1); clf;
 loglog(rk_times, rk_errors, '.-k', 'linewidth', 3, 'MarkerSize', 30); hold on;
-loglog(p_ka_times, p_ka_error, 's-.', 'color', [0.635000000000000   0.078000000000000   0.184000000000000], 'MarkerFaceColor', [0.635000000000000   0.078000000000000   0.184000000000000], 'linewidth', 3, 'MarkerSize', 13);
-loglog(p_k3_times, p_k3_error, '.--', 'color', [0.466000000000000   0.674000000000000   0.188000000000000], 'linewidth', 3, 'MarkerSize', 30);
+loglog(p_ka_times, p_ka_error, 's-', 'color', [0.635000000000000   0.078000000000000   0.184000000000000], 'MarkerFaceColor', [0.635000000000000   0.078000000000000   0.184000000000000], 'linewidth', 3, 'MarkerSize', 13);
+loglog(p_k3_times, p_k3_error, 'd-', 'color', [0.466000000000000   0.674000000000000   0.188000000000000], 'MarkerFaceColor', [0.466000000000000   0.674000000000000   0.188000000000000], 'linewidth', 3, 'MarkerSize', 7);
+
+loglog(p_ka_times_theoretical, p_ka_error, 's-.', 'color', .3 * [1 1 1], 'MarkerFaceColor', .3 * [1 1 1], 'linewidth', 3,  'MarkerSize', 13);
+loglog(p_k3_times_theoretical, p_k3_error, 'd--', 'color', .6 * [1 1 1], 'MarkerFaceColor', .6 * [1 1 1], 'linewidth', 3,  'MarkerSize', 7);
+
 title_str = sprintf('{\\boldmath $N_T=%i$, $N_F=%i$, $N_P=%i$}', Nts(3), num_fine, Nts(3) / num_fine);
 title(title_str, 'interpreter', 'Latex');
-legend({'IMEX-RK4', 'IMEX-PR ($k\le3$)', 'IMEX-PR ($k=3$)'}, 'interpreter', 'latex'); legend box off;
-set(gca, 'FontSize', 15, 'FontName', 'Minion Pro');
+legend({'IMEX-RK4', 'IMEX-PR, $k\le3$', 'IMEX-PR, $k=3$', 'IMEX-PR, $k\le3$ (theory)', 'IMEX-PR, $k=3$ (theory)'}, 'interpreter', 'latex', 'Location', 'NorthEast'); legend box off;
+set(gca, 'FontSize', 17, 'FontName', 'Minion Pro');
 xlabel('relative time'); 
 ylabel('relative error');    
 axis([1 rk_times(end) 1e-9 1e1])
 
-exportFigure(fh, struct('SavePath', fullfile('figures', 'imex-nls-efficiency-adaptive'), 'Format', 'jpg', 'PaperPosition', [0 0 14, 14]))
+exportFigure(fh, struct('SavePath', fullfile('figures', 'imex-nls-efficiency-adaptive'), 'Format', 'jpg', 'PaperPosition', [0 0 16, 14]))
 
 %% -- Experiment 2: Fix Nt, vary Nf ------------------------------------------------------------------------------------ 
 Nt_fixed  = 512;
